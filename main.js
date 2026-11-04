@@ -1,53 +1,23 @@
-(() => {
-  const toggle = document.querySelector('.menu-toggle');
-  const menu = document.querySelector('#mobile-menu');
-  if (toggle && menu) {
-    toggle.addEventListener('click', () => {
-      const open = menu.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
-      toggle.textContent = open ? '×' : '☰';
-    });
-    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      menu.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); toggle.textContent='☰';
-    }));
-  }
-  document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
-    const filter = button.dataset.filter;
-    document.querySelectorAll('[data-filter]').forEach(b => {const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
-    document.querySelectorAll('[data-product-category]').forEach(card => card.classList.toggle('hidden', !(filter==='all'||card.dataset.productCategory===filter)));
-  }));
-  const year=document.querySelector('[data-year]'); if(year) year.textContent=new Date().getFullYear();
 
-  const form=document.querySelector('#contact-form');
-  if(form){
-    const params=new URLSearchParams(window.location.search);
-    const productField=form.querySelector('[name="product"]');
-    const topicField=form.querySelector('[name="topic"]');
-    if(productField && params.has('product')) productField.value=params.get('product');
-    if(topicField && params.has('topic')) {
-      const wanted=params.get('topic').toLowerCase();
-      [...topicField.options].forEach(option=>{if(option.text.toLowerCase()===wanted) topicField.value=option.value;});
-    }
-  }
-  if(form){
-    const status=document.querySelector('#form-status');
-    form.addEventListener('submit', async event=>{
-      event.preventDefault();
-      if(!form.reportValidity()) return;
-      const submit=form.querySelector('[type=submit]');
-      submit.disabled=true; const original=submit.textContent; submit.textContent='Sending…';
-      status.className='form-status'; status.textContent='Sending your enquiry securely…';
-      const data=Object.fromEntries(new FormData(form).entries());
-      try {
-        const response=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-        const result=await response.json().catch(()=>({}));
-        if(!response.ok) throw new Error(result.error || 'The message could not be sent. Please use the email or phone details shown on this page.');
-        status.className='form-status success';status.textContent='Thank you. Your enquiry has been sent successfully.';form.reset();
-      } catch(error) {
-        status.className='form-status error';
-        status.textContent=error.message || 'Unable to send right now. Please contact us using the details listed on this page.';
-      } finally {submit.disabled=false;submit.textContent=original;}
+const menu=document.querySelector('.menu'),links=document.querySelector('.links');
+if(menu&&links)menu.addEventListener('click',()=>links.classList.toggle('open'));
+document.querySelectorAll('[data-year]').forEach(e=>e.textContent=new Date().getFullYear());
+const form=document.querySelector('#contactForm');
+if(form)form.addEventListener('submit',async e=>{e.preventDefault();const btn=form.querySelector('button[type=submit]');const status=form.querySelector('.form-status');btn.disabled=true;btn.textContent='Sending…';try{const data=Object.fromEntries(new FormData(form).entries());const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});if(!r.ok)throw new Error('Unable to send');status.textContent='Thank you. Your enquiry has been submitted.';form.reset()}catch(err){status.textContent='The form could not be sent right now. Please email support@iftlifesciences.com or WhatsApp +91 7738004147.'}finally{btn.disabled=false;btn.textContent='Send enquiry'}});
+
+// Subtle reveal-on-scroll motion; content remains visible if IntersectionObserver is unavailable.
+if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const targets = document.querySelectorAll('.section-head,.card,.split,.photo-panel,.banner-in');
+  targets.forEach(el => el.classList.add('reveal'));
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
     });
-  }
-})();
+  }, { threshold: 0.12 });
+  targets.forEach(el => observer.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+}
