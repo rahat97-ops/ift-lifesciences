@@ -2,22 +2,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const contactForm = document.querySelector('#contactForm');
 
   if (!contactForm) {
-    console.error('Contact form not found! Check your HTML ID.');
+    console.error('Contact form not found!');
     return;
   }
 
   contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Stops page reload
+    e.preventDefault();
 
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.disabled = true;
 
+    // Safely grab values by ID or fallback to input name attributes from your HTML
     const formData = {
-      name: contactForm.querySelector('#name')?.value || '',
-      email: contactForm.querySelector('#email')?.value || '',
-      phone: contactForm.querySelector('#phone')?.value || '',
-      subject: contactForm.querySelector('#subject')?.value || '',
-      message: contactForm.querySelector('#message')?.value || ''
+      name: contactForm.querySelector('#name')?.value || contactForm.querySelector('[name="name"]')?.value || '',
+      email: contactForm.querySelector('#email')?.value || contactForm.querySelector('[name="email"]')?.value || '',
+      phone: contactForm.querySelector('#phone')?.value || contactForm.querySelector('[name="phone"]')?.value || '',
+      subject: contactForm.querySelector('#subject')?.value || contactForm.querySelector('[name="subject"]')?.value || 'Product enquiry',
+      message: contactForm.querySelector('#message')?.value || contactForm.querySelector('[name="message"]')?.value || ''
     };
 
     try {
