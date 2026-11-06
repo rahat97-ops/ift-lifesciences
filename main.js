@@ -48,20 +48,22 @@ document.addEventListener("DOMContentLoaded", function() {
   `;
   document.head.appendChild(style);
 
-  // Helper function to check if the user is interacting with form fields
-  function isInputField(target) {
+  // Helper function to check if the target is something the user is allowed to copy/interact with
+  function isAllowedTarget(target) {
     return (
       target.tagName === "INPUT" ||
       target.tagName === "TEXTAREA" ||
       target.isContentEditable ||
-      target.closest("form") !== null
+      target.closest("form") !== null ||
+      target.closest(".contact-info") !== null ||     /* Add this class to your address/phone/email container */
+      target.closest(".allow-copy") !== null          /* Generic class you can put on any copyable element */
     );
   }
 
   // 3. Function to handle warning display near cursor
   function showWarning(e) {
-    // Allow normal interaction if inside form inputs/textareas
-    if (isInputField(e.target)) {
+    // Allow normal interaction if inside forms or designated contact info
+    if (isAllowedTarget(e.target)) {
       return;
     }
 
@@ -79,12 +81,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }, 2000);
   }
 
-  // 4. Disable right-click except on form fields
+  // 4. Disable right-click except on allowed fields/elements
   document.addEventListener("contextmenu", showWarning);
 
-  // 5. Disable copy and cut except on form fields
+  // 5. Disable copy and cut except on allowed fields/elements
   document.addEventListener("copy", showWarning);
   document.addEventListener("cut", showWarning);
 });
+
 
 
