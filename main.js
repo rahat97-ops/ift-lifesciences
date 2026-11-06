@@ -1,55 +1,12 @@
 
-
 const menu=document.querySelector('.menu'),links=document.querySelector('.links');
 if(menu&&links)menu.addEventListener('click',()=>links.classList.toggle('open'));
-   
-document.addEventListener('DOMContentLoaded', () => {
-  const contactForm = document.querySelector('#contactForm');
-   });
+document.querySelectorAll('[data-year]').forEach(e=>e.textContent=new Date().getFullYear());
+const form=document.querySelector('#contactForm');
+if(form)form.addEventListener('submit',async e=>{e.preventDefault();const btn=form.querySelector('button[type=submit]');const status=form.querySelector('.form-status');btn.disabled=true;btn.textContent='Sending…';try{const data=Object.fromEntries(new FormData(form).entries());const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});if(!r.ok)throw new Error('Unable to send');status.textContent='Thank you. Your enquiry has been submitted.';form.reset()}catch(err){status.textContent='The form could not be sent right now. Please email support@iftlifesciences.com or WhatsApp +91 7738004147.'}finally{btn.disabled=false;btn.textContent='Send enquiry'}});
 
-  if (!contactForm) {
-    console.error('Contact form not found!');
-    return;
-  }
-
-  contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
-    if (submitBtn) submitBtn.disabled = true;
-
-    // Safely grab values by ID or fallback to input name attributes from your HTML
-    const formData = {
-      name: contactForm.querySelector('#name')?.value || contactForm.querySelector('[name="name"]')?.value || '',
-      email: contactForm.querySelector('#email')?.value || contactForm.querySelector('[name="email"]')?.value || '',
-      phone: contactForm.querySelector('#phone')?.value || contactForm.querySelector('[name="phone"]')?.value || '',
-      subject: contactForm.querySelector('#subject')?.value || contactForm.querySelector('[name="subject"]')?.value || 'Product enquiry',
-      message: contactForm.querySelector('#message')?.value || contactForm.querySelector('[name="message"]')?.value || ''
-    };
-
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.ok) {
-        alert('Enquiry sent successfully!');
-        contactForm.reset();
-      } else {
-        alert(result.error || 'Failed to send message.');
-      }
-    } catch (err) {
-      alert('Network error. Please try again.');
-    } finally {
-      if (submitBtn) submitBtn.disabled = false;
-       
-    }
-  });
- if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+// Subtle reveal-on-scroll motion; content remains visible if IntersectionObserver is unavailable.
+if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const targets = document.querySelectorAll('.section-head,.card,.split,.photo-panel,.banner-in');
   targets.forEach(el => el.classList.add('reveal'));
   const observer = new IntersectionObserver(entries => {
@@ -64,5 +21,3 @@ document.addEventListener('DOMContentLoaded', () => {
 } else {
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
 }
-
-  
