@@ -1,5 +1,4 @@
-(() => {
-  const toggle = document.querySelector('.menu-toggle');
+const toggle = document.querySelector('.menu-toggle');
   const menu = document.querySelector('#mobile-menu');
   if (toggle && menu) {
     toggle.addEventListener('click', () => {
@@ -17,6 +16,7 @@
     document.querySelectorAll('[data-filter]').forEach(b => {const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
     document.querySelectorAll('[data-product-category]').forEach(card => card.classList.toggle('hidden', !(filter==='all'||card.dataset.productCategory===filter)));
   }));
+
 
 document.addEventListener('DOMContentLoaded', () => {
   const contactForm = document.querySelector('#contactForm');
