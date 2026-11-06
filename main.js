@@ -5,6 +5,7 @@ document.querySelectorAll('[data-year]').forEach(e=>e.textContent=new Date().get
    
 document.addEventListener('DOMContentLoaded', () => {
   const contactForm = document.querySelector('#contactForm');
+   });
 
   if (!contactForm) {
     console.error('Contact form not found!');
@@ -45,7 +46,20 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Network error. Please try again.');
     } finally {
       if (submitBtn) submitBtn.disabled = false;
+       
     }
   });
+   document.addEventListener("DOMContentLoaded", function() {
+  const hamburger = document.querySelector(".hamburger, .menu-toggle, .navbar-toggler, #nav-icon");
+  const navMenu = document.querySelector(".nav-menu, .navbar-nav, nav ul");
+
+  if (hamburger && navMenu) {
+    hamburger.addEventListener("click", function() {
+      hamburger.classList.toggle("active");
+      navMenu.classList.toggle("active");
+    });
+  }
+});
+
 
 
