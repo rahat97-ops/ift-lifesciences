@@ -55,8 +55,8 @@ document.addEventListener("DOMContentLoaded", function() {
       target.tagName === "TEXTAREA" ||
       target.isContentEditable ||
       target.closest("form") !== null ||
-      target.closest(".contact-card") !== null ||
-      target.closest(".contact-box") !== null ||
+      target.closest(".card") !== null ||
+      target.closest(".card-body") !== null ||
       target.closest(".contact-info") !== null ||
       target.closest(".allow-copy") !== null
     );
