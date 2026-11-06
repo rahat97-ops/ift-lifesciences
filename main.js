@@ -1,7 +1,13 @@
-const contactForm = document.querySelector('#contactform');
-if (contactForm) {
+document.addEventListener('DOMContentLoaded', () => {
+  const contactForm = document.querySelector('#contactForm');
+
+  if (!contactForm) {
+    console.error('Contact form not found! Check your HTML ID.');
+    return;
+  }
+
   contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Stops page reload
 
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.disabled = true;
@@ -35,4 +41,4 @@ if (contactForm) {
       if (submitBtn) submitBtn.disabled = false;
     }
   });
-}
+});
