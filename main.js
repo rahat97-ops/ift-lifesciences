@@ -1,14 +1,7 @@
 
- document.addEventListener("DOMContentLoaded", function() {
-  const hamburger = document.querySelector(".hamburger, .menu-toggle, .navbar-toggler, #nav-icon");
-  const navMenu = document.querySelector(".nav-menu, .navbar-nav, nav ul");
 
-  if (hamburger && navMenu) {
-    hamburger.addEventListener("click", function() {
-      hamburger.classList.toggle("active");
-      navMenu.classList.toggle("active");
-    });
-
+const menu=document.querySelector('.menu'),links=document.querySelector('.links');
+if(menu&&links)menu.addEventListener('click',()=>links.classList.toggle('open'));
    
 document.addEventListener('DOMContentLoaded', () => {
   const contactForm = document.querySelector('#contactForm');
@@ -56,17 +49,20 @@ document.addEventListener('DOMContentLoaded', () => {
        
     }
   });
-   document.addEventListener("DOMContentLoaded", function() {
-  const hamburger = document.querySelector(".hamburger, .menu-toggle, .navbar-toggler, #nav-icon");
-  const navMenu = document.querySelector(".nav-menu, .navbar-nav, nav ul");
-
-  if (hamburger && navMenu) {
-    hamburger.addEventListener("click", function() {
-      hamburger.classList.toggle("active");
-      navMenu.classList.toggle("active");
+ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const targets = document.querySelectorAll('.section-head,.card,.split,.photo-panel,.banner-in');
+  targets.forEach(el => el.classList.add('reveal'));
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
     });
-  }
-});
+  }, { threshold: 0.12 });
+  targets.forEach(el => observer.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+}
 
-
-
+  
