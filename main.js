@@ -1,11 +1,6 @@
-const toggle = document.querySelector('.menu-toggle');
-  const menu = document.querySelector('#mobile-menu');
-  if (toggle && menu) {
-    toggle.addEventListener('click', () => {
-      const open = menu.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
-      toggle.textContent = open ? '×' : '☰';
+
+const menu=document.querySelector('.menu'),links=document.querySelector('.links');
+if(menu&&links)menu.addEventListener('click',()=>links.classList.toggle('open'));
    
 document.addEventListener('DOMContentLoaded', () => {
   const contactForm = document.querySelector('#contactForm');
