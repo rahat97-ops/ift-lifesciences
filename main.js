@@ -1,7 +1,14 @@
 
-const menu=document.querySelector('.menu'),links=document.querySelector('.links');
-if(menu&&links)menu.addEventListener('click',()=>links.classList.toggle('open'));
-document.querySelectorAll('[data-year]').forEach(e=>e.textContent=new Date().getFullYear());
+ document.addEventListener("DOMContentLoaded", function() {
+  const hamburger = document.querySelector(".hamburger, .menu-toggle, .navbar-toggler, #nav-icon");
+  const navMenu = document.querySelector(".nav-menu, .navbar-nav, nav ul");
+
+  if (hamburger && navMenu) {
+    hamburger.addEventListener("click", function() {
+      hamburger.classList.toggle("active");
+      navMenu.classList.toggle("active");
+    });
+
    
 document.addEventListener('DOMContentLoaded', () => {
   const contactForm = document.querySelector('#contactForm');
