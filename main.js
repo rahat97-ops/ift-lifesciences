@@ -48,27 +48,43 @@ document.addEventListener("DOMContentLoaded", function() {
   `;
   document.head.appendChild(style);
 
+  // Helper function to check if the user is interacting with form fields
+  function isInputField(target) {
+    return (
+      target.tagName === "INPUT" ||
+      target.tagName === "TEXTAREA" ||
+      target.isContentEditable ||
+      target.closest("form") !== null
+    );
+  }
+
   // 3. Function to handle warning display near cursor
   function showWarning(e) {
+    // Allow normal interaction if inside form inputs/textareas
+    if (isInputField(e.target)) {
+      return;
+    }
+
     e.preventDefault();
     
-    // Position the tooltip slightly offset from the cursor
+    // Position tooltip offset from cursor
     tooltip.style.left = (e.clientX + 15) + "px";
     tooltip.style.top = (e.clientY + 15) + "px";
     tooltip.style.display = "block";
 
-    // Hide the tooltip automatically after 2 seconds
+    // Hide tooltip after 2 seconds
     clearTimeout(tooltip.timer);
     tooltip.timer = setTimeout(() => {
       tooltip.style.display = "none";
     }, 2000);
   }
 
-  // 4. Disable right-click (context menu)
+  // 4. Disable right-click except on form fields
   document.addEventListener("contextmenu", showWarning);
 
-  // 5. Disable keyboard shortcuts or copy events
+  // 5. Disable copy and cut except on form fields
   document.addEventListener("copy", showWarning);
   document.addEventListener("cut", showWarning);
 });
+
 
