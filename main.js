@@ -1,6 +1,22 @@
-const menu=document.querySelector('.menu'),links=document.querySelector('.links');
-if(menu&&links)menu.addEventListener('click',()=>links.classList.toggle('open'));
-
+(() => {
+  const toggle = document.querySelector('.menu-toggle');
+  const menu = document.querySelector('#mobile-menu');
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+      toggle.textContent = open ? '×' : '☰';
+    });
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      menu.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); toggle.textContent='☰';
+    }));
+  }
+  document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
+    const filter = button.dataset.filter;
+    document.querySelectorAll('[data-filter]').forEach(b => {const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+    document.querySelectorAll('[data-product-category]').forEach(card => card.classList.toggle('hidden', !(filter==='all'||card.dataset.productCategory===filter)));
+  }));
 
 document.addEventListener('DOMContentLoaded', () => {
   const contactForm = document.querySelector('#contactForm');
