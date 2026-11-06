@@ -48,43 +48,39 @@ document.addEventListener("DOMContentLoaded", function() {
   `;
   document.head.appendChild(style);
 
-  // Helper function to check if the target is something the user is allowed to copy/interact with
+  // Helper function to check if target is inside form, allowed copy items, or the left contact box
   function isAllowedTarget(target) {
     return (
       target.tagName === "INPUT" ||
       target.tagName === "TEXTAREA" ||
       target.isContentEditable ||
       target.closest("form") !== null ||
-      target.closest(".contact-info") !== null ||     /* Add this class to your address/phone/email container */
-      target.closest(".allow-copy") !== null          /* Generic class you can put on any copyable element */
+      target.closest(".contact-card") !== null ||
+      target.closest(".contact-box") !== null ||
+      target.closest(".contact-info") !== null ||
+      target.closest(".allow-copy") !== null
     );
   }
 
   // 3. Function to handle warning display near cursor
   function showWarning(e) {
-    // Allow normal interaction if inside forms or designated contact info
     if (isAllowedTarget(e.target)) {
       return;
     }
 
     e.preventDefault();
-    
-    // Position tooltip offset from cursor
     tooltip.style.left = (e.clientX + 15) + "px";
     tooltip.style.top = (e.clientY + 15) + "px";
     tooltip.style.display = "block";
 
-    // Hide tooltip after 2 seconds
     clearTimeout(tooltip.timer);
     tooltip.timer = setTimeout(() => {
       tooltip.style.display = "none";
     }, 2000);
   }
 
-  // 4. Disable right-click except on allowed fields/elements
+  // 4. Attach protection listeners
   document.addEventListener("contextmenu", showWarning);
-
-  // 5. Disable copy and cut except on allowed fields/elements
   document.addEventListener("copy", showWarning);
   document.addEventListener("cut", showWarning);
 });
