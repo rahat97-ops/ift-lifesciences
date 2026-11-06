@@ -21,3 +21,54 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
 } else {
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
 }
+document.addEventListener("DOMContentLoaded", function() {
+  // 1. Create the floating warning tooltip element
+  const tooltip = document.createElement("div");
+  tooltip.className = "copy-warning-tooltip";
+  tooltip.innerText = "Content protection: Copying or right-clicking is disabled.";
+  document.body.appendChild(tooltip);
+
+  // 2. Inject basic styles for the popup cursor message
+  const style = document.createElement("style");
+  style.innerHTML = `
+    .copy-warning-tooltip {
+      position: fixed;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-family: sans-serif;
+      border-radius: 4px;
+      pointer-events: none;
+      display: none;
+      z-index: 999999;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+  `;
+  document.head.appendChild(style);
+
+  // 3. Function to handle warning display near cursor
+  function showWarning(e) {
+    e.preventDefault();
+    
+    // Position the tooltip slightly offset from the cursor
+    tooltip.style.left = (e.clientX + 15) + "px";
+    tooltip.style.top = (e.clientY + 15) + "px";
+    tooltip.style.display = "block";
+
+    // Hide the tooltip automatically after 2 seconds
+    clearTimeout(tooltip.timer);
+    tooltip.timer = setTimeout(() => {
+      tooltip.style.display = "none";
+    }, 2000);
+  }
+
+  // 4. Disable right-click (context menu)
+  document.addEventListener("contextmenu", showWarning);
+
+  // 5. Disable keyboard shortcuts or copy events
+  document.addEventListener("copy", showWarning);
+  document.addEventListener("cut", showWarning);
+});
+
