@@ -4,7 +4,7 @@ export async function POST(request) {
     const name = String(data.name || "").trim();
     const email = String(data.email || "").trim();
     const phone = String(data.phone || "").trim();
-    const subject = String(data.subject || "Website enquiry").trim();
+    const subject = String(data.subject || "").trim();
     const message = String(data.message || "").trim();
 
     if (!name || !email || !message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
